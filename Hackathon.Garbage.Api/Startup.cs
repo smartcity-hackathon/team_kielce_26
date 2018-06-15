@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hackathon.Garbage.Api.Context;
-using Hackathon.Garbage.Api.Hubs;
+﻿using Hackathon.Garbage.Api.Hubs;
+using Hackathon.Garbage.Dal.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Hackathon.Garbage.Api
 {
@@ -28,7 +22,7 @@ namespace Hackathon.Garbage.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<GarbageDbContext>(options =>
+            services.AddDbContext<FloraDbContext>(options =>
                           options.UseSqlServer(Configuration.GetConnectionString("GarbageDbContext")), ServiceLifetime.Transient);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

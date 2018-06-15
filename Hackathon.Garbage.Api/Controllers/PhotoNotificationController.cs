@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Hackathon.Garbage.Api.Context;
-using Hackathon.Garbage.Api.DbContext;
 using Hackathon.Garbage.Api.Hubs;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +12,7 @@ namespace Hackathon.Garbage.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class PhotoNotificationController : ControllerBase
-    {
+    {/*
         private readonly GarbageDbContext garbageDbContext;
         private readonly IHubContext<MessageHub> hub;
 
@@ -78,7 +74,7 @@ namespace Hackathon.Garbage.Api.Controllers
 
                 return BadRequest(e.Message);
             }
-
-        }
+            
+        }*/
     }
 }
