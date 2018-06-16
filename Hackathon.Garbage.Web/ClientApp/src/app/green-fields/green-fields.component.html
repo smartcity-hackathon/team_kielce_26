@@ -1,0 +1,27 @@
+<div class="components-container-gt-xs">
+  <div fxLayout="column" fxFlexFill #mapContainer>
+    <div class="mat-elevation-z1 map-container" fxFlexFill>
+      <agm-map [latitude]="lat" [longitude]="lng" [zoom]="13" [ngStyle]="{ 'height': height }">
+        <!--<agm-polygon>
+          <agm-polyline-point *ngFor="let vertex of polylines" [latitude]="vertex.latitude" [longitude]="vertex.longitude">
+          </agm-polyline-point>
+        </agm-polygon>-->
+
+        <agm-polygon *ngFor="let field of fields" [editable]="false" [polyDraggable]="false" [paths]="field.cordinates" (polyMouseOver)="mouseOver(infoWindow)" (polyClick)="clickField(field)">
+          <agm-info-window [disableAutoPan]="false" #infoWindow>
+            <strong>InfoWindow content</strong>
+          </agm-info-window>
+        </agm-polygon>
+
+        <agm-marker *ngFor="let m of markers" [latitude]="m.latitude" [longitude]="m.longitude" modelsbyref="false">
+          <agm-info-window>
+            <div>
+              <img [src]="m?.urlImage" width="200px" height="200px" alt="Random third slide">
+              <strong>My Info Window</strong>
+            </div>
+          </agm-info-window>
+        </agm-marker>
+      </agm-map>
+    </div>
+  </div>
+</div>

@@ -18,10 +18,24 @@ namespace Hackathon.Garbage.Dal.DbContexts
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {/*
             modelBuilder.Entity<FieldEntity>().
                 HasMany(x => x.Cordinates).
                 WithOne(x => x.Field);
+            modelBuilder.Entity<FieldEntity>().
+                HasMany(x => x.Orders).
+                WithOne(x => x.Field);
+
+            modelBuilder.Entity<OrderEntity>().
+                HasOne(x => x.Executive).
+                WithMany(x => x.Orders);
+
+            modelBuilder.Entity<RatingEntity>().
+                HasOne(x => x.Field).
+                WithMany(x => x.Ratings);*/
+
+            modelBuilder.Entity<CordinatesEntity>().Property(o => o.lat).HasColumnType("decimal(18,8)");
+            modelBuilder.Entity<CordinatesEntity>().Property(o => o.lng).HasColumnType("decimal(18,8)");
         }
 
         public DbSet<CordinatesEntity> Cordinates { get; set; }
@@ -29,6 +43,9 @@ namespace Hackathon.Garbage.Dal.DbContexts
         public DbSet<ExecutiveEntity> Executives { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<RatingEntity> Ratings { get; set; }
+        public DbSet<AlertsEntity> Alerts { get; set; }
+        public DbSet<ProblemNotificationEntity> ProblemNotifications { get; set; }
+        public DbSet<PhotoEntity> Photos { get; set; }
 
     }
 }

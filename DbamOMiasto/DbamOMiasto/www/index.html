@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://hackathonkielce.azurewebsites.net data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; script-src 'self' http://hackathonkielce.azurewebsites.net 'unsafe-eval' 'unsafe-inline'; ">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
+    <script src="scripts/jquery-3.2.1.min.js"></script>
+    <script src="scripts/jquery.mobile-1.5.0-alpha.1.min.js"></script>
+    <link rel="stylesheet" href="css/fontawesome-all.css" crossorigin="anonymous">
+    <script type="text/javascript" src="cordova.js"></script>
+
+</head>
+<body>
+    <script>
+        $(document).ready(function () {
+            var dataImportant = null;
+            var jqxhr = $.getJSON("http://hackathonkielce.azurewebsites.net/api/orders/getall", function (data) {
+                //console.log(data);
+                $('.window#nearby .works-list ul.works').html('');
+                var liczba = 0;
+                dataImportant = data;
+                $.each(data, function (key, val) {
+                    liczba += Math.floor((Math.random() * 10) + 1);
+                    if (val['type'] == "koszenie") icon = '<i class="fab fa-pagelines"></i>';
+                    if (val['type'] == "odśnieżanie") icon = '<i class="far fa-snowflake"></i>';
+                    if (val['type'] == "przycinanie") icon = '<i class="fas fa-tree"></i>';
+                    if (val['type'] == "sadzenie") icon = '<i class="fas fa-leaf"></i>';
+                    $('.window#nearby .works-list ul.works').append('<li data-distance="' + liczba + '" data-key="' + key + '"><span class="work-icon">' + icon + '</span><span class="work-title" >' + val['title'] + '</span ><span class="work-distanse">' + liczba+'km</span></li>');
+
+                    $('.window#future .works-list ul.works').append('<li data-time="' + liczba + ' lipca" data-key="' + key + '"><span class="work-icon">' + icon + '</span><span class="work-distanse">' + liczba + ' lipca</span></li>');
+                    $('.window#future .works-list ul.works').append('<li data-time="' + (liczba + 1) + ' lipca" data-key="' + key + '"><span class="work-icon">' + icon + '</span><span class="work-distanse">' + (liczba + 1) + ' lipca</span></li>');
+                   
+                });
+                var liczba = 0;
+                $.each(data, function (key, val) {
+                    liczba += Math.floor((Math.random() * 10) + 1);
+                    if (val['type'] == "koszenie") icon = '<i class="fab fa-pagelines"></i>';
+                    if (val['type'] == "odśnieżanie") icon = '<i class="far fa-snowflake"></i>';
+                    if (val['type'] == "przycinanie") icon = '<i class="fas fa-tree"></i>';
+                    if (val['type'] == "sadzenie") icon = '<i class="fas fa-leaf"></i>';
+                    
+                    $('.window#future .works-list ul.works').append('<li data-time="' + (liczba + 3) + ' lipca" data-key="' + key + '"><span class="work-icon">' + icon + '</span><span class="work-distanse">' + (liczba + 3) + ' lipca</span></li>');
+
+                });
+            });
+
+
+            var backWindow = null;
+
+            $('.window#nearby .works-list ul.works').on('click', 'li', function () {
+                backWindow = $(this).parent().parent().parent();
+                var key = $(this).attr('data-key');
+                var distance = $(this).attr('data-distance');
+                $('.window').hide();
+                $('.window-popup').show();
+                $('.window-popup .small').html(dataImportant[key]['title']);
+                $('.window-popup .localization').html('<i class="far fa-compass"></i> ' + distance + 'km');
+                $('.column-hid.column-info').html('');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Lokalizacja:</b> ' + dataImportant[key]['field']['name']+'</div>');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Typ pracy:</b> <span style="text-transform: capitalize;">' + dataImportant[key]['type']+ '</span></div>');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Data ukończenia:</b> ' + dataImportant[key]['finishDate']+'</div>');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Wykonawca:</b> ' + dataImportant[key]['executive']['name']+'</div>');
+
+                $('.column-hid.column-info').show();
+                $('.column-hid.column-rank').hide();
+            });
+
+            var backWindow = null;
+
+            $('.window#future .works-list ul.works').on('click', 'li', function () {
+                backWindow = $(this).parent().parent().parent();
+                var key = $(this).attr('data-key');
+                var time = $(this).attr('data-time');
+                $('.window').hide();
+                $('.window-popup').show();
+                $('.window-popup .small').html(dataImportant[key]['title']);
+                $('.window-popup .localization').html('<i class="far fa-calendar-alt"></i> ' + time);
+                $('.column-hid.column-info').html('');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Lokalizacja:</b> ' + dataImportant[key]['field']['name'] + '</div>');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Typ pracy:</b> <span style="text-transform: capitalize;">' + dataImportant[key]['type'] + '</span></div>');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Data ukończenia:</b> ' + dataImportant[key]['finishDate'] + '</div>');
+                $('.column-hid.column-info').append('<div class="info-line"><b>Wykonawca:</b> ' + dataImportant[key]['executive']['name'] + '</div>');
+
+                $('.column-hid.column-info').show();
+                $('.column-hid.column-rank').hide();
+            });
+
+
+
+
+            $('.window-popup .photo .back').on('click', function () {
+                backWindow.show();
+                $('.window-popup').hide();
+                backWindow = null;
+            });
+            $('.information .col.col-info').on('click', function () {
+                $('.column-hid.column-info').show();
+                $('.column-hid.column-rank').hide();
+            });
+            $('.information .col.col-rank').on('click', function () {
+                $('.column-hid.column-rank').show();
+                $('.column-hid.column-info').hide();
+            });
+       });
+
+    </script>
+    <div class="window-popup" id="work-popup">
+        <div class="photo" style="background-image: url('images/images.jpg')">
+            <div class="back"><i class="fas fa-chevron-left"></i></div>
+            <div class="popup-title">Wybrane wydarzenie</div>
+            <div class="localization"><i class="far fa-compass"></i> 14km</div>
+        </div>
+        <div class="description">
+            <div class="small">Sadzenie nowych rabatek na ul. Klonowej</div>
+            <div class="information">
+                <div class="col col-info active">Informacje</div>
+                <div class="col col-rank">Opinie</div>
+            </div>
+            <section class="column-hid column-info">
+            </section>
+            <section class="column-hid column-rank">
+                <div class="opinion">
+                    <div class="author">Daniel Domagała</div>
+                    <div class="date">2 dni temu</div>
+                    <div class="text">Witam, pracownik nie dokonał zadania według tego co było ustalone + wstawił sfałszowane zdjęcie.</div>
+                    <div class="rank"><i class="far fa-frown active"></i><i class="far fa-meh"></i><i class="far fa-smile"></i></div>
+                    <div class="addons">[+] załącznik</div>
+                    <div class="opinion-answer">
+                        <div class="author">URZĄD MIASTA</div>
+                        <div class="date">dziś</div>
+                        <div class="text">Została przebadane pańskie zdjęcie oraz skonsultowane zostało z pracownikiem. Dziękujemy za szybki kontakt.</div>
+                    </div>
+                </div>
+                <div class="opinion">
+                    <div class="author">Daniel Domagała</div>
+                    <div class="date">2 dni temu</div>
+                    <div class="text">Jest pare problemów, ale nie przeszkadzają</div>
+                    <div class="rank"><i class="far fa-frown "></i><i class="far fa-meh active"></i><i class="far fa-smile "></i></div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="window" id="nearby">
+        <header class="h-main"><div class="logo">Dbam o Miasto!</div></header>
+        <section class="title">W pobliżu</section>
+        <div class="question back"><i class="fas fa-chevron-left"></i></div>
+        <div class="bell"><i class="far fa-bell"></i></div>
+        <div class="filters">
+            <div class="slider"><div class="slider-bar"><div class="slider-bar-inside"></div></div><div class="slider-line"><i class="fas fa-bars" style="transform: rotate(-90deg);"></i></div></div>
+            <div class="slider-info">40km</div>
+        </div>
+        <nav class="works-list">
+            <ul class="works">
+                <li>
+                    <span class="work-icon"><i class="fas fa-leaf"></i></span>
+                    <span class="work-title">Sadzenie nowych rabatek na ul. Klonowej</span>
+                    <span class="work-distanse">15km</span>
+                </li>
+                <li>
+                    <span class="work-icon"><i class="fas fa-leaf"></i></span>
+                    <span class="work-title">Wymiana kwiatów na rondzie im. Stanisława Staszica</span>
+                    <span class="work-distanse">17,5km</span>
+                </li>
+                <li>
+                    <span class="work-icon"><i class="fas fa-tree"></i></span>
+                    <span class="work-title">Przycinka drzew na ul. Warszawskiej</span>
+                    <span class="work-distanse">17,5km</span>
+                </li>
+                <li>
+                    <span class="work-icon"><i class="fas fa-leaf"></i></span>
+                    <span class="work-title">Wymiana kwiatów na rondzie im. Stanisława Staszica</span>
+                    <span class="work-distanse">17,5km</span>
+                </li>
+                <li>
+                    <span class="work-icon"><i class="fas fa-tree"></i></span>
+                    <span class="work-title">Przycinka drzew na ul. Solidarności</span>
+                    <span class="work-distanse">17,5km</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="window" id="map">
+        <header class="h-main"><div class="logo">Dbam o Miasto!</div></header>
+        <section class="title">Mapa</section>
+        <div class="question back"><i class="fas fa-chevron-left"></i></div>
+        <div class="bell"><i class="far fa-bell"></i></div>
+    </div>
+    <div class="window" id="future">
+        <header class="h-main"><div class="logo">Dbam o Miasto!</div></header>
+        <section class="title">Najbliższe</section>
+        <div class="question back"><i class="fas fa-chevron-left"></i></div>
+        <div class="bell"><i class="far fa-bell"></i></div>
+        <nav class="works-list">
+            <ul class="works">
+            </ul>
+        </nav>
+    </div>
+    <div class="window" id="settings">
+        <header class="h-main"><div class="logo">Dbam o Miasto!</div></header>
+        <section class="title">Ustawienia</section>
+        <div class="question back"><i class="fas fa-chevron-left"></i></div>
+        <div class="bell"><i class="far fa-bell"></i></div>
+    </div>
+    <div class="window" id="welcome">
+        <div class="question"><i class="far fa-question-circle"></i></div>
+        <div class="bell"><i class="far fa-bell"></i></div>
+        <header class="h-main"><div class="logo">Dbam</br>o Miasto!</div></header>
+        <nav class="welcome-menu">
+            <ul class="welcome-menu-ul">
+                <li>
+                    <span class="li-icon"><i class="fas fa-compass"></i></span>
+                    <span class="li-title">W POBLIŻU</span>
+                </li>
+                <li>
+                    <span class="li-icon"><i class="fas fa-map"></i></span>
+                    <span class="li-title">MAPA</span>
+                </li>
+                <li>
+                    <span class="li-icon"><i class="far fa-calendar-alt"></i></span>
+                    <span class="li-title">NAJBLIŻSZE</span>
+                </li>
+                <li>
+                    <span class="li-icon"><i class="fas fa-sliders-h"></i></span>
+                    <span class="li-title">USTAWIENIA</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <script type="text/javascript" src="scripts/index.js"></script>
+</body>
+</html>

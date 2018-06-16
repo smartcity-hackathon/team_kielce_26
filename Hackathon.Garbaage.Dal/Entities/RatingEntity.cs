@@ -9,5 +9,10 @@ namespace Hackathon.Garbage.Dal.Entities
         public int Id { get; set; }
         public int Score { get; set; }
         public string User { get; set; }
+        public int FieldId { get; set; }
+        public string Comment { get; set; }
+
+        public virtual FieldEntity Field { get; set; }
+        public virtual List<PhotoEntity> Photos { get; set; }
     }
 }

@@ -1,13 +1,18 @@
-﻿using Hackathon.Garbage.Api.Hubs;
+﻿using AutoMapper;
+using Hackathon.Garbage.Dal.Hubs;
 using Hackathon.Garbage.Dal.DbContexts;
+using Hackathon.Garbage.Dal.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
+using Hackathon.Garbage.Dal.NoSql;
 
-namespace Hackathon.Garbage.Api
+namespace Hackathon.Garbage.Dal
 {
     public class Startup
     {
@@ -23,20 +28,35 @@ namespace Hackathon.Garbage.Api
         {
 
             services.AddDbContext<FloraDbContext>(options =>
-                          options.UseSqlServer(Configuration.GetConnectionString("GarbageDbContext")), ServiceLifetime.Transient);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                          //options.UseSqlServer("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = D:\\dev\\hackathon\\Database\\FloraDb.mdf;Integrated Security=True")
+                          options.UseSqlServer(Configuration.GetConnectionString("FreeMsDb"))
+                          );
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            }); ;
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
-       builder =>
-       {
-           builder
-           .AllowAnyMethod()
-           .AllowAnyHeader()
-           .AllowAnyOrigin()
-              .AllowCredentials();
-       }));
+           builder =>
+           {
+               builder
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowAnyOrigin()
+                  .AllowCredentials();
+           }));
 
             services.AddSignalR();
+            services.AddAutoMapper();
+
+            services.AddScoped<IFieldsRepository, FieldsRepository>();
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IExecutiveRepository, ExecutiveRepository>();
+            services.AddScoped<IAlertsRepository, AlertsRepository>();
+            services.AddScoped<IRatingRepository, RatingRepository>();
+            services.AddScoped<IPhotosRepository, PhotosRepository>();
+
+            services.AddScoped<IJsonFileReader, JsonFileReader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

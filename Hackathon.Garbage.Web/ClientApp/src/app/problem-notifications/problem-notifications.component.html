@@ -2,7 +2,14 @@
   <div fxLayout="column" fxFlexFill #mapContainer>
     <div class="mat-elevation-z1 map-container" fxFlexFill>
       <agm-map [latitude]="lat" [longitude]="lng" [zoom]="13" [ngStyle]="{ 'height': height }">
-        <agm-marker *ngFor="let m of markers"  [latitude]="m.latitude" [longitude]="m.longitude" modelsbyref="false">
+        <!--<agm-polygon>
+    <agm-polyline-point *ngFor="let vertex of polylines" [latitude]="vertex.latitude" [longitude]="vertex.longitude">
+    </agm-polyline-point>
+  </agm-polygon>-->
+
+        <agm-polygon [editable]="true" [polyDraggable]="true" [paths]="paths"></agm-polygon>
+
+        <agm-marker *ngFor="let m of markers" [latitude]="m.latitude" [longitude]="m.longitude" modelsbyref="false">
           <agm-info-window>
             <div>
               <img [src]="m?.urlImage" width="200px" height="200px" alt="Random third slide">

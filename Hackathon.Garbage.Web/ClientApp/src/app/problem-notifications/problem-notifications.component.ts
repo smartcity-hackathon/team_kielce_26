@@ -1,4 +1,3 @@
- 
 import { Component, OnInit, ViewChild, HostListener, Inject, SimpleChange } from '@angular/core';
 import { AgmMap, AgmCoreModule } from '@agm/core';
 import { MapsAPILoader } from '@agm/core';
@@ -6,7 +5,9 @@ import { ProblemNotificationService } from '../service/problem-notification/prob
 import { Marker } from '@agm/core/services/google-maps-types';
 import { ProblemNotificationModel } from '../model/api/problem-notification';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr'
- 
+import { VertexModel } from '../models/vertex.model';
+import { LatLngLiteral } from '../models/google-maps-types';
+
 @Component({
   selector: 'app-problem-notifications',
   templateUrl: './problem-notifications.component.html',
@@ -19,12 +20,26 @@ export class ProblemNotificationsComponent implements OnInit {
   lat: number = 50.865544;
   zoom: number = 0;
   height: string = '500px';
+ 
+
+  paths: Array<LatLngLiteral> = [
+    { lat: 0, lng: 10 },
+    { lat: 0, lng: 20 },
+    { lat: 10, lng: 20 },
+    { lat: 10, lng: 10 },
+    { lat: 0, lng: 10 }
+  ]
+
+
   @ViewChild(AgmMap) private myMap: AgmMap;
   @ViewChild('mapContainer') mapContainer: any;
   constructor(private mapsAPILoader: MapsAPILoader, @Inject('problemNotificationService') private problemNotificationService) {
-   }
+  }
 
   ngOnInit() {
+
+
+
     const connection = new HubConnectionBuilder()
       .withUrl("http://localhost:60464/PhotoNotification")
       .build();
@@ -42,8 +57,8 @@ export class ProblemNotificationsComponent implements OnInit {
 
     this.problemNotificationService.getList().subscribe(res => {
       this.markers = res;
-      
- });
+
+    });
     setTimeout(() => {
       console.log(this.mapContainer.nativeElement.offsetHeight);
       // let h = this.mapContainer.nativeElement.offsetHeight - 10;
